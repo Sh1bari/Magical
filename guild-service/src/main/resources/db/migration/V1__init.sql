@@ -11,27 +11,27 @@ CREATE TABLE expeditions
 
 CREATE TABLE heroes
 (
-    id                      BIGINT NOT NULL,
-    name                    VARCHAR,
-    type                    VARCHAR(255),
-    level                   SMALLINT,
-    status                  VARCHAR(255),
-    characteristic_fight    INTEGER,
-    characteristic_strategy INTEGER,
-    characteristic_magic    INTEGER,
+    id       BIGINT NOT NULL,
+    name     VARCHAR,
+    type     VARCHAR(255),
+    level    VARCHAR(255),
+    status   VARCHAR(255),
+    fight    INTEGER,
+    strategy INTEGER,
+    magic    INTEGER,
     CONSTRAINT pk_heroes PRIMARY KEY (id)
 );
 
 CREATE TABLE missions
 (
-    id            BIGINT NOT NULL,
-    name          VARCHAR,
-    mission_type  VARCHAR(255),
-    level_enum    VARCHAR(255),
-    cost_fight    INTEGER,
-    cost_strategy INTEGER,
-    cost_magic    INTEGER,
-    cost_total    INTEGER,
+    id           BIGINT NOT NULL,
+    name         VARCHAR,
+    mission_type VARCHAR(255),
+    level        VARCHAR(255),
+    fight        INTEGER,
+    strategy     INTEGER,
+    magic        INTEGER,
+    total        INTEGER,
     CONSTRAINT pk_missions PRIMARY KEY (id)
 );
 

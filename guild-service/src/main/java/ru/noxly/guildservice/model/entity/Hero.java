@@ -29,6 +29,7 @@ public class Hero {
     @Column
     private final HeroType type;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private final LevelEnum level;
 

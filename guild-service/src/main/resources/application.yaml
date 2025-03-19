@@ -47,3 +47,9 @@ management:
   endpoint:
     health:
       show-details: always
+kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:dol-registry.itu.lan:29093}
+  group-id: ${KAFKA_GROUP_ID:guild-group}
+  topics:
+    in:
+    out:
