@@ -8,7 +8,7 @@ services:
       placement:
         constraints:
           - "node.labels.region == ru"
-    image: mirror.gcr.io/postgres:17-alpine
+    image: mirror.gcr.io/postgres:16.4-alpine
     restart: always
     environment:
       - POSTGRES_DB=guild-db
