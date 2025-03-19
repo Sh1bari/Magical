@@ -9,6 +9,8 @@ services:
         constraints:
           - "node.labels.region == ru"
     image: mirror.gcr.io/postgres:16.4-alpine
+    networks:
+      - my-custom-network
     restart: always
     environment:
       - POSTGRES_DB=guild-db
