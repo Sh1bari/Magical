@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+
+  guildpostgres:
+    image: mirror.gcr.io/postgres:17-alpine
+    environment:
+      - POSTGRES_DB=guild-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg-data-guild:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5435:5432"
+
+volumes:
+  pg-data-guild:
+    driver: local

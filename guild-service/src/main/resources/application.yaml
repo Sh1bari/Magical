@@ -1,6 +1,6 @@
 server:
   forward-headers-strategy: native
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:8080}
   jetty:
     max-http-response-header-size: 64KB
   servlet:
@@ -17,7 +17,7 @@ spring:
       mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5435}/${POSTGRES_DB_NAME:fuel-seller}
+    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5435}/${POSTGRES_DB_NAME:guild-db}
     username: ${POSTGRES_USERNAME:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
   jpa:
@@ -43,7 +43,3 @@ management:
   endpoint:
     health:
       show-details: always
-services:
-  main:
-    url: ${MAIN_SERVER_URL:http://localhost:8081}
-    timeOut: ${MAIN_SERVER_TIMEOUT:3000} #in millis

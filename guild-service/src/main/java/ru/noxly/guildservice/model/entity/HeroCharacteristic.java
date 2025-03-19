@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class HeroCharacteristic {
+
     private final Integer characteristicFight;
 
     private final Integer characteristicStrategy;

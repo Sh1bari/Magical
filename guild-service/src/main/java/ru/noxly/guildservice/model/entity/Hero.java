@@ -38,5 +38,5 @@ public class Hero {
 
     @ManyToOne
     @JoinColumn(name = "team_hero_id")
-    private TeamHero teamHero;
+    private final TeamHero teamHero;
 }

@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class CostCharacteristic {
+
     private final Integer costFight;
 
     private final Integer costStrategy;
