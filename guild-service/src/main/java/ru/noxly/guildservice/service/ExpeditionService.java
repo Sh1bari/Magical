@@ -18,13 +18,19 @@ public class ExpeditionService {
 
     private final RepoResolver resolver;
 
-    public Expedition createExpedition(final CreateExpeditionRequest request) {
+    public Expedition create(final CreateExpeditionRequest request) {
         val expedition = Expedition.init()
                 .setExpeditionStatus(CREATED)
                 .setCreateTime(OffsetDateTime.now())
                 .setName(request.getName())
                 .build();
         resolver.resolve(Expedition.class).save(expedition);
+
+        return expedition;
+    }
+
+    public Expedition findById(String id) {
+        val expedition = resolver.resolve(Expedition.class).findById(id);
 
         return expedition;
     }
