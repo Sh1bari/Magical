@@ -22,47 +22,48 @@ services:
       - "127.0.0.1:5435:5432"
 
   zookeeper:
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - "node.labels.region == ru"
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:7.5.0
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_DATA_DIR: /var/lib/zookeeper/data
+      ZOOKEEPER_DATALOG_DIR: /var/lib/zookeeper/datalog
     ports:
-      - "2181:2181"
+      - 22181:2181
+    restart: always
     volumes:
-      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
     networks:
       - my-custom-network
 
+
   kafka:
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints:
-          - "node.labels.region == ru"
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
+    image: confluentinc/cp-kafka:7.5.0
     depends_on:
       - zookeeper
+    command: [ "sh", "-c", "sleep 40 && /etc/confluent/docker/run" ]
     ports:
-      - "9092:9092"
-    volumes:
-      - kafka-data:/var/lib/kafka/data
-    hostname: kafka
+      - 29092:29092
+      - 29093:29093
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://31.128.46.246:29093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "True"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_SEGMENT_BYTES: 104857600
+      KAFKA_LOG_RETENTION_MS: 604800000
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824
+      KAFKA_TRANSACTION_TIMEOUT_MS: 60000
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    restart: always
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     networks:
       - my-custom-network
 
@@ -71,7 +72,9 @@ volumes:
     driver: local
   kafka-data:
     driver: local
-  zookeeper-data:
+  zookeeper_data:
+    driver: local
+  zookeeper_logs:
     driver: local
 
 networks:
