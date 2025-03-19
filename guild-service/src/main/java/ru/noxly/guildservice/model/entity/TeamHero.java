@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,9 +19,11 @@ public class TeamHero {
     @Column(name = "id")
     private final Long id;
 
-    @OneToMany(mappedBy = "teamHero", orphanRemoval = true)
-    private final List<Hero> heroes;
+    @ManyToOne
+    @JoinColumn(name = "hero_id")
+    private final Hero hero;
 
-    @OneToMany(mappedBy = "teamHero", orphanRemoval = true)
-    private final List<Team> teams;
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private final Team team;
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import ru.noxly.guildservice.model.enums.LevelEnum;
 import ru.noxly.guildservice.model.enums.MissionType;
 
+import java.util.List;
+
 @Entity
 @Getter
 @ToString
@@ -32,7 +34,6 @@ public class Mission {
     @Embedded
     private final CostCharacteristic characteristic;
 
-    @ManyToOne
-    @JoinColumn(name = "task_mission_")
-    private final TaskMission taskMission;
+    @OneToMany(mappedBy = "mission", orphanRemoval = true)
+    private final List<TaskMission> taskMissions;
 }

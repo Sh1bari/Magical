@@ -18,9 +18,11 @@ public class TaskMission {
     @Column
     private final Long id;
 
-    @OneToMany(mappedBy = "taskMission", orphanRemoval = true)
-    private final List<Task> tasks;
+    @ManyToOne
+    @JoinColumn(name = "mission_id")
+    private final Mission mission;
 
-    @OneToMany(mappedBy = "taskMission", orphanRemoval = true)
-    private final List<Mission> missions;
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private final Task task;
 }

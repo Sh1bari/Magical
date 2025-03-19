@@ -3,6 +3,8 @@ package ru.noxly.guildservice.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @ToString
@@ -23,7 +25,6 @@ public class Task {
     @JoinColumn(name = "expedition_id")
     private final Expedition expedition;
 
-    @ManyToOne
-    @JoinColumn(name = "task_mission_id")
-    private final TaskMission taskMission;
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    private final List<TaskMission> taskMissions;
 }

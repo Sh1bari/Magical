@@ -5,6 +5,7 @@ import lombok.*;
 import ru.noxly.guildservice.model.enums.TeamStatus;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,11 +36,10 @@ public class Team {
     @Column
     private final OffsetDateTime resultTime;
 
-    @ManyToOne
-    @JoinColumn(name = "team_hero_id")
-    private final TeamHero teamHero;
-
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "expedition_id")
     private final Expedition expedition;
+
+    @OneToMany(mappedBy = "team", orphanRemoval = true)
+    private final List<TeamHero> teamHeroes;
 }

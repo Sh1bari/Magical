@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
-@Table(name = "entities")
+@Table(name = "expeditions")
 public class Expedition {
 
     @Id
