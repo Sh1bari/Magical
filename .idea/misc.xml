@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/guild-service/pom.xml" />
         <option value="$PROJECT_DIR$/efs/pom.xml" />
+        <option value="$PROJECT_DIR$/web-socket/pom.xml" />
+        <option value="$PROJECT_DIR$/Authorization/pom.xml" />
       </list>
     </option>
   </component>

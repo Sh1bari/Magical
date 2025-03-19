@@ -49,6 +49,9 @@ management:
   endpoint:
     health:
       show-details: always
+redis:
+  host: ${REDIS_HOST:localhost}       # Адрес Redis-сервера
+  port: ${REDIS_PORT:6380}
 kafka:
   enabled: ${KAFKA_ENABLED:true}
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:31.128.46.246:29093}

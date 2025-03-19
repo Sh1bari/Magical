@@ -22,6 +22,81 @@ services:
     networks:
       - my-custom-network
 
+  socket:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: registry.sh1bari.ru/hack/socket:1.0.0
+    ports:
+      - "8082:8082"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - traefik_network
+      - my-custom-network
+    labels:
+      - "traefik.enable=true"
+      # ---------- WebSocket (апгрейд для /api/ws) ----------
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.websocket.rule=Host(`ws.hack.noxly.ru`)"
+      - "traefik.http.routers.websocket.entrypoints=websecure"
+      - "traefik.http.routers.websocket.tls=true"
+      - "traefik.http.routers.websocket.tls.certresolver=myresolver"
+      - "traefik.http.services.websocket.loadbalancer.server.port=8082"
+      - "traefik.http.routers.websocket.priority=30"
+
+  auth:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: registry.sh1bari.ru/hack/auth:1.0.0
+    environment:
+      - POSTGRES_ADDRESS=authpostgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - authpostgres
+    networks:
+      - traefik_network
+      - my-custom-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.authHack.rule=Host(`auth.noxly.ru`)"
+      - "traefik.http.routers.authHack.entrypoints=websecure"
+      - "traefik.http.routers.authHack.tls=true"
+      - "traefik.http.routers.authHack.tls.certresolver=myresolver"
+      - "traefik.http.services.authHack.loadbalancer.server.port=8083"
+      - "traefik.http.routers.authHack.priority=21"
+      - "traefik.docker.network=traefik_network"
+
+  authpostgres:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: mirror.gcr.io/postgres:16.4-alpine
+    networks:
+      - my-custom-network
+    restart: always
+    environment:
+      - POSTGRES_DB=auth
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pg-data-auth:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5434:5432"
+
   guildpostgres:
     deploy:
       mode: replicated
@@ -41,6 +116,20 @@ services:
       - pg-data-guild:/var/lib/postgresql/data
     ports:
       - "127.0.0.1:5435:5432"
+
+  redis:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "127.0.0.1:6380:6379"
+    networks:
+      - my-custom-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -97,6 +186,8 @@ volumes:
   zookeeper_data:
     driver: local
   zookeeper_logs:
+    driver: local
+  pg-data-auth:
     driver: local
 
 networks:
