@@ -10,7 +10,7 @@ import ru.noxly.efs.webClient.main.model.dto.HeroDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class HeroPageRes {
-    private final PageResponse<HeroDto> lots;
+    private final PageResponse<HeroDto> heroes;
 
     public static HeroPageRes fromPage(org.springframework.data.domain.Page<HeroDto> page) {
         return new HeroPageRes(PageResponse.fromPage(page));

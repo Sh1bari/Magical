@@ -28,4 +28,6 @@ public class HeroFilter {
     private final Integer strategy;
 
     private final Integer magic;
+
+    private final String name;
 }

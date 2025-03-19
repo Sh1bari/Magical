@@ -14,6 +14,7 @@ import ru.noxly.efs.webClient.main.model.request.CreateExpeditionRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateHeroRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateMissionRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateTaskRequest;
+import ru.noxly.efs.webClient.main.model.request.GetHeroReq;
 import ru.noxly.efs.webClient.main.model.request.HeroFilter;
 import ru.noxly.efs.webClient.main.model.response.HeroPageRes;
 
@@ -112,14 +113,16 @@ public class GuildClient {
         return response;
     }
 
-//    public HeroPageRes getHeroesWithFilters(final HeroFilter heroFilter, final Pageable pageable) {
-//        val uri =
-//
-//
-//        val response = guildWebClient.post(uri, HeroPageRes.class);
-//
-//        return response;
-//    }
+    public HeroPageRes getHeroesWithFilters(final GetHeroReq req) {
+        val uri = "/api/hero/filters";
+
+        val response = guildWebClient.post(
+                uri,
+                req,
+                HeroPageRes.class);
+
+        return response;
+    }
 
 
 //    public OrderDto createOrder(final UserDto userDto, final CreateOrderDtoReq request) {
