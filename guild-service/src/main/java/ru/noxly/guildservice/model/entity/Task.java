@@ -26,5 +26,5 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "expedition_id")
-    private Expedition expedition;
+    private final Expedition expedition;
 }
