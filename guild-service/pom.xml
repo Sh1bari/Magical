@@ -102,7 +102,7 @@
 
         <!--Libs-->
         <dependency>
-            <groupId>ru.sh1bari</groupId>
+            <groupId>ru.noxly</groupId>
             <artifactId>resolver</artifactId>
             <version>2.0.0</version>
         </dependency>
