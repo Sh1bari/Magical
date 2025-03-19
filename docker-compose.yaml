@@ -1,6 +1,27 @@
 version: "3.8"
 services:
 
+  guild:
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
+    image: registry.sh1bari.ru/hack/guildservice:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_ADDRESS=guild-db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - KAFKA_ENABLED=false
+    depends_on:
+      - guildpostgres
+    networks:
+      - my-custom-network
+
   guildpostgres:
     deploy:
       mode: replicated

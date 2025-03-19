@@ -6,6 +6,8 @@ server:
   servlet:
     context-path: /api
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
   jackson:
     date-format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
     serialization:
@@ -48,8 +50,11 @@ management:
     health:
       show-details: always
 kafka:
+  enabled: ${KAFKA_ENABLED:true}
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:31.128.46.246:29093}
   group-id: ${KAFKA_GROUP_ID:guild-group}
   topics:
     in:
+      calc-guild-team-result: calc-guild.team-result
     out:
+      guild-calc-calculate-team: guild-calc.calculate-team

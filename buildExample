@@ -3,4 +3,3 @@ docker build -t registry.sh1bari.ru/hack/guildservice:1.0.0 ./guild-service
 
 docker push registry.sh1bari.ru/hack/efs:1.0.0
 docker push registry.sh1bari.ru/hack/guildservice:1.0.0
-
