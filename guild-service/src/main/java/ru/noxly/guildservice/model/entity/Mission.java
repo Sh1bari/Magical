@@ -30,10 +30,10 @@ public class Mission {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private final LevelEnum levelEnum;
+    private final LevelEnum level;
 
     @Embedded
-    private final CostCharacteristic characteristic;
+    private final CostCharacteristic cost;
 
     @OneToMany(mappedBy = "mission", orphanRemoval = true)
     private final List<TaskMission> taskMissions;

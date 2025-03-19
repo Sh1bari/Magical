@@ -11,11 +11,11 @@ import lombok.*;
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class CostCharacteristic {
 
-    private final Integer costFight;
+    private final Integer fight;
 
-    private final Integer costStrategy;
+    private final Integer strategy;
 
-    private final Integer costMagic;
+    private final Integer magic;
 
-    private final Integer costTotal;
+    private final Integer total;
 }

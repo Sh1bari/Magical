@@ -11,9 +11,9 @@ import lombok.*;
 @Builder(builderMethodName = "init", setterPrefix = "set", toBuilder = true)
 public class HeroCharacteristic {
 
-    private final Integer characteristicFight;
+    private final Integer fight;
 
-    private final Integer characteristicStrategy;
+    private final Integer strategy;
 
-    private final Integer characteristicMagic;
+    private final Integer magic;
 }
