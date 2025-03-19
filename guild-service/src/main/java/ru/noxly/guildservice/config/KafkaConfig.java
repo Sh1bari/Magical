@@ -66,7 +66,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic claimsTopic() {
-        return new NewTopic("claim-processing.claims-for-processing", 3, (short) 1);
+        return new NewTopic("guild-calc.calculate-team", 3, (short) 1);
     }
 
 }
