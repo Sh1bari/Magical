@@ -13,6 +13,7 @@ import lombok.*;
 public class TaskMission {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private final Long id;
 

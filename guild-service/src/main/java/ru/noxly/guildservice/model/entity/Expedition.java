@@ -17,6 +17,7 @@ import java.util.List;
 public class Expedition {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private final Long id;
 

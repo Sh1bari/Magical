@@ -26,15 +26,16 @@ import ru.noxly.guildservice.service.ExpeditionService;
 public class ExpeditionController {
 
     private final ExpeditionService expeditionService;
-    private final ExpeditionDtoConverter converter;
-//    private final ConversionService converter;
+
+    @Qualifier("conversionService")
+    private final ConversionService converter;
 
     @Operation(summary = "Get expedition")
     @ApiResponses()
     @PostMapping("")
     public ResponseEntity<ExpeditionDto> createExpedition(@RequestBody CreateExpeditionRequest request) {
         val expedition = expeditionService.createExpedition(request);
-        val response = converter.convert(expedition);
+        val response = converter.convert(expedition, ExpeditionDto.class);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

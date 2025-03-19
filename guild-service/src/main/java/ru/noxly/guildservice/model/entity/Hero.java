@@ -19,6 +19,7 @@ import java.util.List;
 public class Hero {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private final Long id;
 

@@ -15,6 +15,7 @@ import java.util.List;
 public class Task {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private final Long id;
 

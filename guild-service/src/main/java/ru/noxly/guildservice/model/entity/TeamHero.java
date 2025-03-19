@@ -13,6 +13,7 @@ import lombok.*;
 public class TeamHero {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private final Long id;
 
