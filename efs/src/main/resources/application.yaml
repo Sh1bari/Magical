@@ -1,6 +1,6 @@
 server:
   forward-headers-strategy: native
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
   jetty:
     max-http-response-header-size: 64KB
   servlet:
@@ -11,28 +11,11 @@ spring:
     serialization:
       write-dates-as-timestamps: false
   application:
-    name: guild-service
+    name: efs-server
   servlet:
     multipart:
       max-file-size: 200MB
       max-request-size: 200MB
-  sql:
-    init:
-      mode: always
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:${POSTGRES_PORT:5435}/${POSTGRES_DB_NAME:guild-db}
-    username: ${POSTGRES_USERNAME:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
-  jpa:
-    openInView: true
-    show-sql: false
-    generateDdl: false
-    database: postgresql
-    databasePlatform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        enable_lazy_load_no_trans: true
   main:
     allow-circular-references: true
   flyway:
@@ -47,3 +30,10 @@ management:
   endpoint:
     health:
       show-details: always
+services:
+  fuel:
+    url: ${FUEL_SERVER_URL:http://localhost:8082}
+    timeOut: ${FUEL_SERVER_TIMEOUT:3000} #in millis
+  auth:
+    url: ${AUTH_SERVER_URL:http://localhost:8080}
+    timeOut: ${AUTH_SERVER_TIMEOUT:3000} #in millis

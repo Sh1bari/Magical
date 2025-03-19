@@ -1,4 +1,4 @@
-package ru.noxly.guildservice.config.openApi;
+package ru.noxly.efs.config.openApi;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Guild Service API"
+                title = "EFS Service API"
         ),
         servers = {
                 @Server(
-                        url = "http://localhost:8080/api",
+                        url = "http://localhost:8081/api",
                         description = "Local server"
                 ),
                 @Server(
