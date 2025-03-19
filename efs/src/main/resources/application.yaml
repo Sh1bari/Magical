@@ -31,9 +31,9 @@ management:
     health:
       show-details: always
 services:
-  fuel:
-    url: ${FUEL_SERVER_URL:http://localhost:8082}
+  guild:
+    url: ${FUEL_SERVER_URL:http://localhost:8080}
     timeOut: ${FUEL_SERVER_TIMEOUT:3000} #in millis
   auth:
-    url: ${AUTH_SERVER_URL:http://localhost:8080}
+    url: ${AUTH_SERVER_URL:http://localhost:8081}
     timeOut: ${AUTH_SERVER_TIMEOUT:3000} #in millis

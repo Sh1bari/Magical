@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.guildservice.model.model.dto.HeroDto;
 import ru.noxly.guildservice.model.model.request.CreateHeroRequest;
 import ru.noxly.guildservice.model.model.request.HeroFilter;
+import ru.noxly.guildservice.model.model.response.HeroPageRes;
 import ru.noxly.guildservice.service.HeroService;
 import ru.noxly.guildservice.specification.HeroSpecification;
 
@@ -70,8 +71,8 @@ public class HeroController {
     @Operation(summary = "Get heroes")
     @ApiResponses()
     @GetMapping("")
-    public ResponseEntity<Page<HeroDto>> getAllHeroes(@PageableDefault Pageable pageable,
-                                                      @ParameterObject HeroFilter heroFilter) {
+    public ResponseEntity<HeroPageRes> getAllHeroes(@ParameterObject HeroFilter heroFilter,
+                                                    @PageableDefault Pageable pageable) {
         val spec = Specification.where(HeroSpecification.hasLevel(heroFilter.getLevel()))
                 .and(HeroSpecification.hasHeroStatus(heroFilter.getStatus()))
                 .and(HeroSpecification.hasHeroType(heroFilter.getType()))
@@ -79,7 +80,9 @@ public class HeroController {
                 .and(HeroSpecification.hasStrategy(heroFilter.getStrategy()))
                 .and(HeroSpecification.hasMagic(heroFilter.getMagic()));
         val heroes = heroService.findByPatternAndPageable(spec, pageable);
-        val response = heroes.map(hero -> converter.convert(hero, HeroDto.class));
+        val response = HeroPageRes.fromPage(
+                heroes.map(fuel -> converter.convert(fuel, HeroDto.class))
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
