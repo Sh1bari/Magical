@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.guildservice.model.model.dto.HeroDto;
 import ru.noxly.guildservice.model.model.request.CreateHeroRequest;
+import ru.noxly.guildservice.model.model.request.GetHeroReq;
 import ru.noxly.guildservice.model.model.request.HeroFilter;
 import ru.noxly.guildservice.model.model.response.HeroPageRes;
 import ru.noxly.guildservice.service.HeroService;
@@ -70,16 +71,16 @@ public class HeroController {
 
     @Operation(summary = "Get heroes")
     @ApiResponses()
-    @GetMapping("")
-    public ResponseEntity<HeroPageRes> getAllHeroes(@ParameterObject HeroFilter heroFilter,
-                                                    @PageableDefault Pageable pageable) {
-        val spec = Specification.where(HeroSpecification.hasLevel(heroFilter.getLevel()))
-                .and(HeroSpecification.hasHeroStatus(heroFilter.getStatus()))
-                .and(HeroSpecification.hasHeroType(heroFilter.getType()))
-                .and(HeroSpecification.hasFight(heroFilter.getFight()))
-                .and(HeroSpecification.hasStrategy(heroFilter.getStrategy()))
-                .and(HeroSpecification.hasMagic(heroFilter.getMagic()));
-        val heroes = heroService.findByPatternAndPageable(spec, pageable);
+    @PostMapping("/filters")
+    public ResponseEntity<HeroPageRes> getAllHeroes(@RequestBody GetHeroReq req) {
+        val spec = Specification.where(HeroSpecification.hasLevel(req.getHeroFilter().getLevel()))
+                .and(HeroSpecification.hasHeroStatus(req.getHeroFilter().getStatus()))
+                .and(HeroSpecification.hasHeroType(req.getHeroFilter().getType()))
+                .and(HeroSpecification.hasFight(req.getHeroFilter().getFight()))
+                .and(HeroSpecification.hasStrategy(req.getHeroFilter().getStrategy()))
+                .and(HeroSpecification.hasMagic(req.getHeroFilter().getMagic()))
+                .and(HeroSpecification.hasName(req.getHeroFilter().getName()));
+        val heroes = heroService.findByPatternAndPageable(spec, req.getPaginationRequest().getPageable());
         val response = HeroPageRes.fromPage(
                 heroes.map(fuel -> converter.convert(fuel, HeroDto.class))
         );

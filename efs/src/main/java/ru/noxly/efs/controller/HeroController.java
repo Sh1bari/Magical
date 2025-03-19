@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.efs.webClient.main.GuildClient;
 import ru.noxly.efs.webClient.main.model.dto.HeroDto;
 import ru.noxly.efs.webClient.main.model.request.CreateHeroRequest;
+import ru.noxly.efs.webClient.main.model.request.GetHeroReq;
 import ru.noxly.efs.webClient.main.model.request.HeroFilter;
 import ru.noxly.efs.webClient.main.model.response.HeroPageRes;
 
@@ -58,15 +59,14 @@ public class HeroController {
                 .body(response);
     }
 
-//    @Operation(summary = "Get heroes with filters")
-//    @ApiResponses()
-//    @GetMapping("")
-//    public ResponseEntity<HeroPageRes> getHeroesWithFilters(@ParameterObject HeroFilter heroFilter,
-//                                                            @PageableDefault() Pageable pageable) {
-//        val response = guildClient.getHeroesWithFilters(heroFilter, pageable);
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(response);
-//    }
+    @Operation(summary = "Get heroes with filters")
+    @ApiResponses()
+    @PostMapping("/filters")
+    public ResponseEntity<HeroPageRes> getHeroesWithFilters(@RequestBody GetHeroReq req) {
+        val response = guildClient.getHeroesWithFilters(req);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
 }

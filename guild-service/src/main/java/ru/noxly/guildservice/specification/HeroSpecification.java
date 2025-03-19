@@ -1,12 +1,23 @@
 package ru.noxly.guildservice.specification;
 
 import org.springframework.data.jpa.domain.Specification;
+import ru.noxly.guildservice.model.entity.Expedition;
 import ru.noxly.guildservice.model.entity.Hero;
 import ru.noxly.guildservice.model.enums.HeroStatus;
 import ru.noxly.guildservice.model.enums.HeroType;
 import ru.noxly.guildservice.model.enums.LevelEnum;
 
 public class HeroSpecification {
+
+    public static Specification<Hero> hasName(String name) {
+        return (root, query, criteriaBuilder) -> {
+            if (name == null || name.isBlank()) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
+                    "%" + name.toLowerCase() + "%");
+        };
+    }
 
     public static Specification<Hero> hasLevel(LevelEnum level) {
         return (root, query, criteriaBuilder) -> {
