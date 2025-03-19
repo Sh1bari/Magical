@@ -21,10 +21,10 @@ public class Task {
     @Column
     private final String name;
 
-    @ManyToOne
-    @JoinColumn(name = "expedition_id")
-    private final Expedition expedition;
-
     @OneToMany(mappedBy = "task", orphanRemoval = true)
     private final List<TaskMission> taskMissions;
+
+    @ManyToOne
+    @JoinColumn(name = "expedition_id")
+    private Expedition expedition;
 }
