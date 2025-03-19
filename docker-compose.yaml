@@ -63,7 +63,7 @@ services:
       KAFKA_LOG_DIRS: /var/lib/kafka/data
     restart: always
     volumes:
-      - kafka_data:/var/lib/kafka/data
+      - kafka-data:/var/lib/kafka/data
     networks:
       - my-custom-network
 
