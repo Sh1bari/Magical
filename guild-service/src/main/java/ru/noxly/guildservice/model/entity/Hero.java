@@ -2,6 +2,7 @@ package ru.noxly.guildservice.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.noxly.guildservice.model.entity.embeded.HeroCharacteristic;
 import ru.noxly.guildservice.model.enums.HeroStatus;
 import ru.noxly.guildservice.model.enums.HeroType;
 import ru.noxly.guildservice.model.enums.LevelEnum;

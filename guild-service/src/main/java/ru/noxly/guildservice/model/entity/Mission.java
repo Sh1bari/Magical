@@ -2,6 +2,7 @@ package ru.noxly.guildservice.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.noxly.guildservice.model.entity.embeded.CostCharacteristic;
 import ru.noxly.guildservice.model.enums.LevelEnum;
 import ru.noxly.guildservice.model.enums.MissionType;
 

@@ -1,4 +1,4 @@
-package ru.noxly.guildservice.model.entity;
+package ru.noxly.guildservice.model.entity.embeded;
 
 import jakarta.persistence.Embeddable;
 import lombok.*;
