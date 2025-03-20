@@ -1,4 +1,4 @@
-package ru.noxly.guildservice.kafka.out;
+package ru.noxly.guildservice.kafka;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -6,12 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noxly.guildservice.kafka.model.ExpeditionKafkaDto;
-import ru.noxly.guildservice.model.entity.Expedition;
-import ru.noxly.guildservice.model.entity.Mission;
-import ru.noxly.guildservice.model.entity.TaskMission;
+import ru.noxly.guildservice.kafka.model.KafkaInModelDto;
+import ru.noxly.guildservice.kafka.out.KafkaProducerService;
+import ru.noxly.guildservice.model.entity.*;
+import ru.noxly.guildservice.model.enums.TeamStatus;
+import ru.noxly.guildservice.model.model.dto.ExpeditionDto;
+import ru.noxly.guildservice.redis.ExpeditionPublisher;
 import ru.noxly.resolver.RepoResolver;
 
 import java.awt.*;
@@ -34,11 +38,31 @@ public class KafkaService {
 
     private final RepoResolver resolver;
 
+    private final ExpeditionPublisher expeditionPublisher;
+
+    private final ConversionService conversionService;
+
     @Transactional
     public void sendCalculateRequest(final Long expeditionId) {
         val expedition = resolver.resolve(Expedition.class).findById(expeditionId);
         val model = buildModel(expedition);
         kafkaProducerService.sendMessage(topic, null, model);
+    }
+
+    @Transactional
+    public void handleTeam(final KafkaInModelDto model) {
+        val expedition = resolver.resolve(Expedition.class).findById(model.getExpeditionId());
+        val heroes = resolver.getHeroRepository().getHeroesByIdIn(model.getHeroes());
+        val team = expedition.getTeam();
+        heroes.forEach(hero -> {
+            val teamHero = TeamHero.init().setTeam(team).setHero(hero).build();
+            resolver.resolve(TeamHero.class).save(teamHero);
+        });
+        val newTeam = team.toBuilder().setStatus(TeamStatus.PREPARED).build();
+        resolver.resolve(Team.class).save(newTeam);
+        val entity = resolver.resolve(Expedition.class).findById(model.getExpeditionId());
+        val dto = conversionService.convert(entity, ExpeditionDto.class);
+        expeditionPublisher.publishUpdate(dto);
     }
 
     private ExpeditionKafkaDto buildModel(Expedition expedition) {
