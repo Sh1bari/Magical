@@ -63,6 +63,7 @@ public class ExpeditionService {
         return resolver.resolve(Expedition.class).findAll(spec, pageable);
     }
 
+    @Transactional
     public Expedition startExpedition(Long id, List<Long> team) {
         val sentTime = OffsetDateTime.now();
         val expedition = resolver.resolve(Expedition.class).findById(id);
