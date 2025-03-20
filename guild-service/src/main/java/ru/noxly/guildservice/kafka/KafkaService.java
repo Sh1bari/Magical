@@ -49,6 +49,13 @@ public class KafkaService {
         kafkaProducerService.sendMessage(topic, null, model);
     }
 
+    @PostConstruct
+    @Transactional
+    public void test() {
+        val model = KafkaInModelDto.init().setExpeditionId(4L).setHeroes(List.of(1L, 2L)).build();
+        handleTeam(model);
+    }
+
     @Transactional
     public void handleTeam(final KafkaInModelDto model) {
         val expedition = resolver.resolve(Expedition.class).findById(model.getExpeditionId());
@@ -62,6 +69,7 @@ public class KafkaService {
         resolver.resolve(Team.class).save(newTeam);
         val entity = resolver.resolve(Expedition.class).findById(model.getExpeditionId());
         val dto = conversionService.convert(entity, ExpeditionDto.class);
+        log.info("Send dto: {}", toJson(dto));
         expeditionPublisher.publishUpdate(dto);
     }
 
