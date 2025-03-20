@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
+import ru.noxly.guildservice.kafka.KafkaService;
 import ru.noxly.guildservice.kafka.model.KafkaInModelDto;
 
 @Service
@@ -19,6 +20,8 @@ public class KafkaConsumerService {
     private final ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
 
+    private final KafkaService kafkaService;
+
     /**
      * Обработка сообщений из топика Kafka.
      *
@@ -26,10 +29,11 @@ public class KafkaConsumerService {
      * @param acknowledgment Объект для ручного подтверждения обработки сообщения.
      */
     @KafkaListener(topics = "${kafka.topics.in.calc-guild-team-result}", containerFactory = "kafkaListenerContainerFactory", groupId = "${kafka.group-id}")
-    public void paymentSucceeded(String message, Acknowledgment acknowledgment) {
+    public void teamResult(String message, Acknowledgment acknowledgment) {
         try {
             val request = objectMapper.readValue(message, KafkaInModelDto.class);
             log.info("Processing message: " + request);
+            kafkaService.handleTeam(request);
             acknowledgment.acknowledge();
         } catch (Exception e) {
             log.error("Error processing message: " + e.getMessage());

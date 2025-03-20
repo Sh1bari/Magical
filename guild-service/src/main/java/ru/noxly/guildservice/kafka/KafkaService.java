@@ -49,18 +49,12 @@ public class KafkaService {
         kafkaProducerService.sendMessage(topic, null, model);
     }
 
-    @PostConstruct
-    @Transactional
-    public void test() {
-        val model = KafkaInModelDto.init().setExpeditionId(4L).setHeroes(List.of(1L, 2L)).build();
-        handleTeam(model);
-    }
-
     @Transactional
     public void handleTeam(final KafkaInModelDto model) {
         val expedition = resolver.resolve(Expedition.class).findById(model.getExpeditionId());
         val heroes = resolver.getHeroRepository().getHeroesByIdIn(model.getHeroes());
         val team = expedition.getTeam();
+        team.getTeamHeroes().clear();
         heroes.forEach(hero -> {
             val teamHero = TeamHero.init().setTeam(team).setHero(hero).build();
             resolver.resolve(TeamHero.class).save(teamHero);
