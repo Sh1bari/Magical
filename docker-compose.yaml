@@ -16,7 +16,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=postgres
-      - KAFKA_ENABLED=false
+      - KAFKA_ENABLED=true
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
