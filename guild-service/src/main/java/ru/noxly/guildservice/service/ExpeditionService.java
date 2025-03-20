@@ -9,12 +9,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noxly.guildservice.exceptions.GeneralException;
-import ru.noxly.guildservice.exceptions.GlobalAppException;
 import ru.noxly.guildservice.kafka.KafkaService;
 import ru.noxly.guildservice.model.entity.Expedition;
 import ru.noxly.guildservice.model.entity.Hero;
-import ru.noxly.guildservice.model.entity.Task;
-import ru.noxly.guildservice.model.entity.TaskMission;
 import ru.noxly.guildservice.model.entity.Team;
 import ru.noxly.guildservice.model.entity.TeamHero;
 import ru.noxly.guildservice.model.enums.HeroStatus;
@@ -24,7 +21,6 @@ import ru.noxly.resolver.RepoResolver;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import static ru.noxly.guildservice.model.enums.ExpeditionStatus.CREATED;
 import static ru.noxly.guildservice.model.enums.ExpeditionStatus.IN_EXPEDITION;
@@ -70,6 +66,9 @@ public class ExpeditionService {
     public Expedition startExpedition(Long id, List<Long> team) {
         val sentTime = OffsetDateTime.now();
         val expedition = resolver.resolve(Expedition.class).findById(id);
+        if (expedition.getExpeditionStatus().equals(IN_EXPEDITION)) {
+            throw new GeneralException(400, "Expedition already started");
+        }
         val entity = expedition.toBuilder()
                 .setExpeditionStatus(IN_EXPEDITION)
                 .setSentTime(sentTime)
@@ -88,9 +87,14 @@ public class ExpeditionService {
             resolver.getTeamHeroRepository().deleteAllByTeam(teamExp);
             val heroes = resolver.getHeroRepository().getHeroesByIdIn(team)
                     .stream()
-                    .map(o -> o.toBuilder()
-                            .setStatus(HeroStatus.IN_EXPEDITION)
-                            .build()).toList();
+                    .map(o -> {
+                        if (o.getStatus().equals(HeroStatus.IN_EXPEDITION)) {
+                            throw new GeneralException(400, "Hero with id " + o.getId() + " in expedition");
+                        }
+                        return o.toBuilder()
+                                .setStatus(HeroStatus.IN_EXPEDITION)
+                                .build();
+                    }).toList();
             resolver.resolve(Hero.class).saveAll(heroes);
             val teamHeroes = heroes
                     .stream()
@@ -105,9 +109,14 @@ public class ExpeditionService {
                     .getTeamHeroes()
                     .stream()
                     .map(TeamHero::getHero)
-                    .map(o -> o.toBuilder()
-                            .setStatus(HeroStatus.IN_EXPEDITION)
-                            .build()).toList();
+                    .map(o -> {
+                        if (o.getStatus().equals(HeroStatus.IN_EXPEDITION)) {
+                            throw new GeneralException(400, "Hero with id " + o.getId() + " in expedition");
+                        }
+                        return o.toBuilder()
+                                .setStatus(HeroStatus.IN_EXPEDITION)
+                                .build();
+                    }).toList();
             resolver.resolve(Hero.class).saveAll(heroes);
         }
 
