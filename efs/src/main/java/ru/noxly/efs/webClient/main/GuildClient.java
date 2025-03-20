@@ -18,9 +18,12 @@ import ru.noxly.efs.webClient.main.model.request.GetExpeditionReq;
 import ru.noxly.efs.webClient.main.model.request.GetHeroReq;
 import ru.noxly.efs.webClient.main.model.request.GetMissionReq;
 import ru.noxly.efs.webClient.main.model.request.HeroFilter;
+import ru.noxly.efs.webClient.main.model.request.StartExpeditionReq;
 import ru.noxly.efs.webClient.main.model.response.ExpeditionPageRes;
 import ru.noxly.efs.webClient.main.model.response.HeroPageRes;
 import ru.noxly.efs.webClient.main.model.response.MissionPageRes;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -146,6 +149,29 @@ public class GuildClient {
                 uri,
                 req,
                 HeroPageRes.class);
+
+        return response;
+    }
+
+    public ExpeditionDto startExpedition(final Long id, final List<Long> team) {
+        val uri = "/api/expedition/" + id + "/start";
+        val request = StartExpeditionReq.init().setTeam(team).build();
+
+        val response =  guildWebClient.put(
+                uri.replace("{id}", id.toString()),
+                request,
+                ExpeditionDto.class
+        );
+
+        return response;
+    }
+
+    public String calculateExpedition(final Long id) {
+        val uri = "/api/expedition/{id}/calculate";
+
+        val response = guildWebClient.get(
+                uri.replace("{id}", id.toString()),
+                String.class);
 
         return response;
     }

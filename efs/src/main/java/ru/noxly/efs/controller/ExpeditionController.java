@@ -13,14 +13,18 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.efs.webClient.main.GuildClient;
 import ru.noxly.efs.webClient.main.model.dto.ExpeditionDto;
 import ru.noxly.efs.webClient.main.model.request.CreateExpeditionRequest;
 import ru.noxly.efs.webClient.main.model.request.GetExpeditionReq;
 import ru.noxly.efs.webClient.main.model.response.ExpeditionPageRes;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -60,6 +64,28 @@ public class ExpeditionController {
     @PostMapping("/filters")
     public ResponseEntity<ExpeditionPageRes> getExpeditionWithFilters(@RequestBody GetExpeditionReq req) {
         val response = guildClient.getExpeditionWithFilters(req);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @Operation(summary = "Start expedition")
+    @ApiResponses()
+    @PutMapping("/{id}/start")
+    public ResponseEntity<ExpeditionDto> startExpedition(@PathVariable Long id, @RequestParam List<Long> team) {
+        val response = guildClient.startExpedition(id, team);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @Operation(summary = "Calculate expedition")
+    @ApiResponses()
+    @GetMapping("/{id}/calculate")
+    public ResponseEntity<String> calculateExpedition(@PathVariable Long id) {
+        val response = guildClient.calculateExpedition(id);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

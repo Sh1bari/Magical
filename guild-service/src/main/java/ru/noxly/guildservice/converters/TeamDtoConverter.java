@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.noxly.guildservice.model.entity.Team;
 import ru.noxly.guildservice.model.entity.TeamHero;
 import ru.noxly.guildservice.model.model.dto.TeamDto;
+import ru.noxly.resolver.RepoResolver;
 
 import static ru.noxly.guildservice.utils.CommonUtils.nullOrApply;
 
@@ -15,6 +16,7 @@ import static ru.noxly.guildservice.utils.CommonUtils.nullOrApply;
 public class TeamDtoConverter implements Converter<Team, TeamDto> {
 
     private final HeroDtoConverter heroDtoConverter;
+    private final RepoResolver resolver;
 
     @Override
     public TeamDto convert(@NonNull final Team source) {
@@ -26,8 +28,8 @@ public class TeamDtoConverter implements Converter<Team, TeamDto> {
                 .setSentTime(source.getSentTime())
                 .setHeroes(
                         nullOrApply(
-                                source.getTeamHeroes(), teamHeroes -> teamHeroes.stream()
-                                        .map(TeamHero::getHero)
+                                resolver.getHeroRepository().findHeroesByTeamId(source.getId()),
+                                heroes -> heroes.stream()
                                         .map(heroDtoConverter::convert)
                                         .toList()
                         )

@@ -16,15 +16,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.guildservice.model.model.dto.ExpeditionDto;
 import ru.noxly.guildservice.model.model.request.CreateExpeditionRequest;
 import ru.noxly.guildservice.model.model.request.GetExpeditionReq;
+import ru.noxly.guildservice.model.model.request.StartExpeditionReq;
 import ru.noxly.guildservice.model.model.response.ExpeditionPageRes;
 import ru.noxly.guildservice.service.ExpeditionService;
 import ru.noxly.guildservice.specification.ExpeditionSpecification;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,6 +69,17 @@ public class ExpeditionController {
                 .body(response);
     }
 
+    @Operation(summary = "Calculate team")
+    @ApiResponses()
+    @GetMapping("/{id}/calculate")
+    public ResponseEntity<String> calculateExpedition(@PathVariable Long id) {
+        expeditionService.calculateExpedition(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("команда формируется");
+    }
+
     @Operation(summary = "Get expeditions")
     @ApiResponses()
     @PostMapping("/filters")
@@ -74,6 +90,18 @@ public class ExpeditionController {
         val response = ExpeditionPageRes.fromPage(
                 expeditions.map(expedition -> converter.convert(expedition, ExpeditionDto.class))
         );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @Operation(summary = "Start expedition")
+    @ApiResponses()
+    @PutMapping("/{id}/start")
+    public ResponseEntity<ExpeditionDto> startExpedition(@PathVariable Long id, @RequestBody StartExpeditionReq req) {
+        val expedition = expeditionService.startExpedition(id, req.getTeam());
+        val response = converter.convert(expedition, ExpeditionDto.class);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
