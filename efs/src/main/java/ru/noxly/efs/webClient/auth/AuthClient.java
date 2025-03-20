@@ -15,7 +15,7 @@ public class AuthClient {
     private final AuthWebClient authWebClient;
 
     public UserDto validateUser(String token) {
-        val uri = "/api/internal/**";
+        val uri = "/api/internal/validate-user";
         var response = authWebClient.post(uri,
                 ValidateUserReq.init()
                         .setToken(token)
