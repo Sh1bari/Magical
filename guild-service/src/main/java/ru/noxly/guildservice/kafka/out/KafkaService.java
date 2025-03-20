@@ -1,5 +1,6 @@
 package ru.noxly.guildservice.kafka.out;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -11,11 +12,14 @@ import ru.noxly.guildservice.kafka.model.ExpeditionKafkaDto;
 import ru.noxly.guildservice.model.entity.Expedition;
 import ru.noxly.guildservice.model.entity.Mission;
 import ru.noxly.guildservice.model.entity.TaskMission;
+import ru.noxly.resolver.RepoResolver;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
 import static ru.noxly.guildservice.utils.CommonUtils.nullOrApply;
+import static ru.noxly.guildservice.utils.JsonUtil.toJson;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +32,11 @@ public class KafkaService {
 
     private final KafkaProducerService kafkaProducerService;
 
+    private final RepoResolver resolver;
+
     @Transactional
-    public void sendCalculateRequest(final Expedition expedition) {
+    public void sendCalculateRequest(final Long expeditionId) {
+        val expedition = resolver.resolve(Expedition.class).findById(expeditionId);
         val model = buildModel(expedition);
         kafkaProducerService.sendMessage(topic, null, model);
     }

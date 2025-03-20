@@ -161,6 +161,12 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -178,6 +184,12 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.region == ru"  # Запускаем только на RU сервере
     depends_on:
       - zookeeper
     command: [ "sh", "-c", "sleep 10 && /etc/confluent/docker/run" ]
