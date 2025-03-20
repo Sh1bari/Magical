@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.efs.webClient.main.GuildClient;
 import ru.noxly.efs.webClient.main.model.dto.MissionDto;
 import ru.noxly.efs.webClient.main.model.request.CreateMissionRequest;
+import ru.noxly.efs.webClient.main.model.request.GetMissionReq;
+import ru.noxly.efs.webClient.main.model.response.MissionPageRes;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,6 +49,17 @@ public class MissionController {
     @GetMapping("/{id}")
     public ResponseEntity<MissionDto> getMissionById(@PathVariable String id) {
         val response = guildClient.getMissionById(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @Operation(summary = "Get missions")
+    @ApiResponses()
+    @PostMapping("/filters")
+    public ResponseEntity<MissionPageRes> getMissionWithFilters(@RequestBody GetMissionReq req) {
+        val response = guildClient.getMissionWithFilters(req);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

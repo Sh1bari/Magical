@@ -8,13 +8,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.guildservice.model.model.dto.ExpeditionDto;
 import ru.noxly.guildservice.model.model.request.CreateExpeditionRequest;
+import ru.noxly.guildservice.model.model.request.GetExpeditionReq;
+import ru.noxly.guildservice.model.model.response.ExpeditionPageRes;
 import ru.noxly.guildservice.service.ExpeditionService;
+import ru.noxly.guildservice.specification.ExpeditionSpecification;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,6 +58,22 @@ public class ExpeditionController {
     public ResponseEntity<ExpeditionDto> getExpeditionById(@PathVariable String id) {
         val expedition = expeditionService.findById(id);
         val response = converter.convert(expedition, ExpeditionDto.class);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @Operation(summary = "Get expeditions")
+    @ApiResponses()
+    @PostMapping("/filters")
+    public ResponseEntity<ExpeditionPageRes> getAllExpeditions(@RequestBody GetExpeditionReq req) {
+        val spec = Specification.where(ExpeditionSpecification.hasStatus(req.getExpeditionFilter().getStatus()))
+                .and(ExpeditionSpecification.hasName(req.getExpeditionFilter().getName()));
+        val expeditions = expeditionService.findByPatternAndPageable(spec, req.getPaginationRequest().getPageable());
+        val response = ExpeditionPageRes.fromPage(
+                expeditions.map(expedition -> converter.convert(expedition, ExpeditionDto.class))
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)

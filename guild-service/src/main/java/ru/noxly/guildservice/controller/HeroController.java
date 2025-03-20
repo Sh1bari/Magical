@@ -6,13 +6,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.noxly.guildservice.model.model.dto.HeroDto;
 import ru.noxly.guildservice.model.model.request.CreateHeroRequest;
 import ru.noxly.guildservice.model.model.request.GetHeroReq;
-import ru.noxly.guildservice.model.model.request.HeroFilter;
+import ru.noxly.guildservice.model.model.response.ExpeditionPageRes;
 import ru.noxly.guildservice.model.model.response.HeroPageRes;
 import ru.noxly.guildservice.service.HeroService;
 import ru.noxly.guildservice.specification.HeroSpecification;
@@ -82,7 +78,7 @@ public class HeroController {
                 .and(HeroSpecification.hasName(req.getHeroFilter().getName()));
         val heroes = heroService.findByPatternAndPageable(spec, req.getPaginationRequest().getPageable());
         val response = HeroPageRes.fromPage(
-                heroes.map(fuel -> converter.convert(fuel, HeroDto.class))
+                heroes.map(hero -> converter.convert(hero, HeroDto.class))
         );
 
         return ResponseEntity

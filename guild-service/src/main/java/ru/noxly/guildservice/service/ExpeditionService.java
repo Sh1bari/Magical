@@ -3,6 +3,9 @@ package ru.noxly.guildservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noxly.guildservice.model.entity.Expedition;
@@ -46,5 +49,9 @@ public class ExpeditionService {
         val expedition = resolver.resolve(Expedition.class).findById(id);
 
         return expedition;
+    }
+
+    public Page<Expedition> findByPatternAndPageable(Specification<Expedition> spec, Pageable pageable) {
+        return resolver.resolve(Expedition.class).findAll(spec, pageable);
     }
 }

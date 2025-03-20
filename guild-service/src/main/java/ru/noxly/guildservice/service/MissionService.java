@@ -2,6 +2,9 @@ package ru.noxly.guildservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.noxly.guildservice.model.entity.Mission;
 import ru.noxly.guildservice.model.model.request.CreateMissionRequest;
@@ -29,5 +32,9 @@ public class MissionService {
         val mission = resolver.resolve(Mission.class).findById(id);
 
         return mission;
+    }
+
+    public Page<Mission> findByPatternAndPageable(Specification<Mission> spec, Pageable pageable) {
+        return resolver.resolve(Mission.class).findAll(spec, pageable);
     }
 }

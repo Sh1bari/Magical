@@ -14,9 +14,13 @@ import ru.noxly.efs.webClient.main.model.request.CreateExpeditionRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateHeroRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateMissionRequest;
 import ru.noxly.efs.webClient.main.model.request.CreateTaskRequest;
+import ru.noxly.efs.webClient.main.model.request.GetExpeditionReq;
 import ru.noxly.efs.webClient.main.model.request.GetHeroReq;
+import ru.noxly.efs.webClient.main.model.request.GetMissionReq;
 import ru.noxly.efs.webClient.main.model.request.HeroFilter;
+import ru.noxly.efs.webClient.main.model.response.ExpeditionPageRes;
 import ru.noxly.efs.webClient.main.model.response.HeroPageRes;
+import ru.noxly.efs.webClient.main.model.response.MissionPageRes;
 
 @Slf4j
 @Service
@@ -69,6 +73,17 @@ public class GuildClient {
         return response;
     }
 
+    public MissionPageRes getMissionWithFilters(GetMissionReq req) {
+        val uri = "/api/mission/filters";
+
+        val response = guildWebClient.post(
+                uri,
+                req,
+                MissionPageRes.class);
+
+        return response;
+    }
+
     public ExpeditionDto postExpedition(final CreateExpeditionRequest request) {
         val uri = "/api/expedition";
         val response = guildWebClient.post(
@@ -87,6 +102,17 @@ public class GuildClient {
                 uri.replace("{id}", id),
                 ExpeditionDto.class
         );
+
+        return response;
+    }
+
+    public ExpeditionPageRes getExpeditionWithFilters(final GetExpeditionReq req) {
+        val uri = "/api/expedition/filters";
+
+        val response = guildWebClient.post(
+                uri,
+                req,
+                ExpeditionPageRes.class);
 
         return response;
     }
@@ -123,30 +149,4 @@ public class GuildClient {
 
         return response;
     }
-
-
-//    public OrderDto createOrder(final UserDto userDto, final CreateOrderDtoReq request) {
-//        val uri = "/api/orders";
-//        val body = CreateOrderDto.init()
-//                .setLotId(request.getLotId())
-//                .setKsssnb(request.getKsssnb())
-//                .setKssFuel(request.getKssFuel())
-//                .setVolume(request.getVolume())
-//                .setDeliveryType(request.getDeliveryType())
-//                .setClient(
-//                        CreateClientDto.init()
-//                                .setId(userDto.getId())
-//                                .setMail(userDto.getMail())
-//                                .setName(userDto.getUserInfo().getName())
-//                                .setMiddleName(userDto.getUserInfo().getMiddleName())
-//                                .setSurname(userDto.getUserInfo().getSurname())
-//                                .build()
-//                )
-//                .build();
-//        val response = fuelWebClient.post(
-//                uri,
-//                body,
-//                OrderDto.class);
-//        return response;
-//    }
 }
