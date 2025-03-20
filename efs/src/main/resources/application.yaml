@@ -35,5 +35,5 @@ services:
     url: ${FUEL_SERVER_URL:http://localhost:8080}
     timeOut: ${FUEL_SERVER_TIMEOUT:3000} #in millis
   auth:
-    url: ${AUTH_SERVER_URL:http://localhost:8081}
+    url: ${AUTH_SERVER_URL:http://auth.noxly,ru:8083}
     timeOut: ${AUTH_SERVER_TIMEOUT:3000} #in millis
