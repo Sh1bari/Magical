@@ -12,7 +12,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - POSTGRES_ADDRESS=guild-db
+      - POSTGRES_ADDRESS=guildpostgres
       - POSTGRES_PORT=5432
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=postgres
