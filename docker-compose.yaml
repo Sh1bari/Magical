@@ -10,7 +10,7 @@ services:
         constraints:
           - "node.labels.region == ru"
     ports:
-      - '4174:4174'
+      - '4173:4173'
     environment:
       - VITE_MAIN_ENDPOINT=https://hack.noxly.ru/api
       - VITE_SOCKET_ENDPOINT=https://ws.hack.noxly.ru/api/ws
